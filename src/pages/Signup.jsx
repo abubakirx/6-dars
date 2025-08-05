@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import FormInput from "../components/formInput";
+import FormInput from "../components/FormInput";
 import { useSignup } from "../hooks/useSignup";
 function Signup() {
   const { isPending, signup } = useSignup();

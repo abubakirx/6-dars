@@ -33,6 +33,7 @@ export const useLogin = () => {
       const userRef = doc(db, "users", auth.currentUser.uid);
       await updateDoc(userRef, {
         online: true,
+        lastSeen: "",
       });
       await setDoc(
         doc(db, "users", auth.currentUser.uid),

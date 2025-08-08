@@ -3,10 +3,11 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+
 import MainLayout from "./Layout/MainLayout";
 import ProtectedRoutes from "./components/ProtectedRoutes";
-import { useDispatch } from "react-redux";
 import { Home, Signup, Login, Profile, SingleImage } from "./pages";
 
 import { onAuthStateChanged } from "firebase/auth";
@@ -16,6 +17,19 @@ import { Login as loginAction, authReady } from "./app/features/userSlice";
 function App() {
   const { user, isAuthReady } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user?.displayName && user?.photoURL) {
+        dispatch(loginAction(user));
+      }
+      dispatch(authReady());
+    });
+
+    return () => unsubscribe(); 
+  }, [dispatch]);
+
   const routes = createBrowserRouter([
     {
       path: "/",
@@ -33,7 +47,7 @@ function App() {
           path: "/Profile",
           element: <Profile />,
         },
-        { path: "/SingleImage/:id", element: <SingleImage /> }, //
+        { path: "/SingleImage/:id", element: <SingleImage /> },
       ],
     },
     {
@@ -46,13 +60,7 @@ function App() {
     },
   ]);
 
-  onAuthStateChanged(auth, (user) => {
-    if (user?.displayName && user?.photoURL) {
-      dispatch(loginAction(user));
-    }
-    dispatch(authReady());
-  });
-
   return <>{isAuthReady && <RouterProvider router={routes} />}</>;
 }
+
 export default App;

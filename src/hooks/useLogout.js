@@ -19,6 +19,7 @@ export const useLogout = () => {
       const userRef = doc(db, "users", auth.currentUser.uid);
       await updateDoc(userRef, {
         online: false,
+        lastSeen: new Date(),
       });
       await signOut(auth);
 

@@ -6,16 +6,15 @@ function Login() {
   const { isPending, login } = useLogin();
 
   const handleSubmit = async (e) => {
-    // async qilib oldik
+  
     e.preventDefault();
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
     try {
-      await login(email, password); // login async, kutamiz
-      // agar kerak bo'lsa shu yerda redirect qo'shish mumkin
+      await login(email, password); 
     } catch (err) {
-      // xatolar useLogin ichida toast bilan ko'rsatiladi, bu yerda qo'shimcha ishlov bo'lishi mumkin
+     
       console.error("Login failed:", err);
     }
   };
@@ -47,7 +46,7 @@ function Login() {
                 className="btn btn-primary"
                 disabled={isPending}
               >
-                {isPending ? "Kutilyapti..." : "Login"}
+                {isPending ? "Loading..." : "Login"}
               </button>
               <button type="button" className="btn btn-primary">
                 Google
